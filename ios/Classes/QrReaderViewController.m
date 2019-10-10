@@ -109,7 +109,7 @@
 -(void)stopReading{
     [_captureSession stopRunning];
     _captureSession = nil;
-    [_videoPreviewLayer removeFromSuperlayer];
+   // [_videoPreviewLayer removeFromSuperlayer];
     _isReading = NO;
 }
 
