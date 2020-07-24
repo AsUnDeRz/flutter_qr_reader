@@ -54,6 +54,7 @@ public class QrReaderView implements PlatformView, MethodChannel.MethodCallHandl
         decoratedBarcodeView.getBarcodeView().setDecoderFactory( new DefaultDecoderFactory(formats));
         decoratedBarcodeView.decodeContinuous(new ScannCallback());
         decoratedBarcodeView.setStatusText("");
+        decoratedBarcodeView.getBarcodeView().getCameraSettings().setAutoFocusEnabled(false);
 //        _view.setLayoutParams(layoutParams);
 //        _view.setOnQRCodeReadListener(this);
 //        _view.setQRDecodingEnabled(true);
