@@ -25,7 +25,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 24
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -35,6 +35,6 @@ android {
 
 
 dependencies {
-    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+    implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
 //    implementation('com.google.zxing:core:3.3.3')
 }
