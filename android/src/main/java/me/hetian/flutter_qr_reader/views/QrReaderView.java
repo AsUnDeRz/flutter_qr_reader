@@ -54,7 +54,7 @@ public class QrReaderView implements PlatformView, MethodChannel.MethodCallHandl
         decoratedBarcodeView.getBarcodeView().setDecoderFactory( new DefaultDecoderFactory(formats));
         decoratedBarcodeView.decodeContinuous(new ScannCallback());
         decoratedBarcodeView.setStatusText("");
-        decoratedBarcodeView.getBarcodeView().getCameraSettings().setAutoFocusEnabled(false);
+        decoratedBarcodeView.getBarcodeView().getCameraSettings().setAutoFocusEnabled(true);
 //        _view.setLayoutParams(layoutParams);
 //        _view.setOnQRCodeReadListener(this);
 //        _view.setQRDecodingEnabled(true);
@@ -91,14 +91,18 @@ public class QrReaderView implements PlatformView, MethodChannel.MethodCallHandl
 //        mMethodChannel.invokeMethod("onQRCodeRead", rest);
 //    }
 
-    boolean flashlight;
+    boolean flashlight = false;
     @Override
     public void onMethodCall(MethodCall methodCall, MethodChannel.Result result) {
         switch (methodCall.method) {
             case "flashlight":
-//                _view.setTorchEnabled(!flashlight);
-//                flashlight = !flashlight;
-//                result.success(flashlight);
+                flashlight = !flashlight;
+                if(flashlight){
+                    decoratedBarcodeView.setTorchOn();
+                }else {
+                    decoratedBarcodeView.setTorchOff();
+                }
+                result.success(flashlight);
                 break;
             case "startCamera":
                 decoratedBarcodeView.resume();
