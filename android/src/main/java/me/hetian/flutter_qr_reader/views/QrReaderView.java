@@ -67,6 +67,7 @@ public class QrReaderView implements PlatformView, MethodChannel.MethodCallHandl
         mMethodChannel.setMethodCallHandler(this);
     }
 
+
     @Override
     public View getView() {
         return decoratedBarcodeView;
@@ -74,6 +75,7 @@ public class QrReaderView implements PlatformView, MethodChannel.MethodCallHandl
 
     @Override
     public void dispose() {
+        decoratedBarcodeView.removeView(decoratedBarcodeView.getViewFinder());
         decoratedBarcodeView = null;
         mParams = null;
         mRegistrar = null;

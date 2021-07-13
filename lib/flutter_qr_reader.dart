@@ -10,8 +10,8 @@ import 'package:flutter/widgets.dart';
 class FlutterQrReader {
   static const MethodChannel _channel = const MethodChannel('me.hetian.flutter_qr_reader');
 
-  static Future<String> imgScan(File file) async {
-    if (file?.existsSync() == false) {
+  static Future<String?> imgScan(File file) async {
+    if (file.existsSync() == false) {
       return null;
     }
     try {
@@ -33,10 +33,10 @@ class QrReaderView extends StatefulWidget {
   final double height;
 
   QrReaderView({
-    Key key,
-    this.width,
-    this.height,
-    this.callback,
+    Key? key,
+    required this.width,
+    required this.height,
+    required this.callback,
     this.autoFocusIntervalInMs = 500,
     this.torchEnabled = false,
   }) : super(key: key);
@@ -102,42 +102,50 @@ typedef ReadChangeBack = void Function(String, List<Offset>);
 
 class QrReaderViewController {
   final int id;
-  final MethodChannel _channel;
-  QrReaderViewController(this.id) : _channel = MethodChannel('me.hetian.flutter_qr_reader.reader_view_$id') {
-    _channel.setMethodCallHandler(_handleMessages);
+  MethodChannel? _channel;
+  ReadChangeBack? onQrBack;
+
+  QrReaderViewController(this.id) {
+    _channel = MethodChannel('me.hetian.flutter_qr_reader.reader_view_$id');
+    _channel?.setMethodCallHandler(_handleMessages);
   }
-  ReadChangeBack onQrBack;
 
   Future _handleMessages(MethodCall call) async {
     switch (call.method) {
       case "onQRCodeRead":
-        final points = List<Offset>();
+        final List<Offset> points = [];
         if (call.arguments.containsKey("points")) {
           final pointsStrs = call.arguments["points"];
           for (String point in pointsStrs) {
             final a = point.split(",");
-            points.add(Offset(double.tryParse(a.first), double.tryParse(a.last)));
+            final first = double.tryParse(a.first);
+            final last = double.tryParse(a.last);
+            if (first != null && last != null) {
+              points.add(Offset(first, last));
+            }
           }
         }
 
-        this.onQrBack(call.arguments["text"], points);
+        if (onQrBack != null) {
+          this.onQrBack!(call.arguments["text"], points);
+        }
         break;
     }
   }
 
   // 打开手电筒
-  Future<bool> setFlashlight() async {
-    return _channel.invokeMethod("flashlight");
+  Future<bool?> setFlashlight() async {
+    return _channel?.invokeMethod("flashlight");
   }
 
   // 开始扫码
   Future startCamera(ReadChangeBack onQrBack) async {
     this.onQrBack = onQrBack;
-    return _channel.invokeMethod("startCamera");
+    return _channel?.invokeMethod("startCamera");
   }
 
   // 结束扫码
   Future stopCamera() async {
-    return _channel.invokeMethod("stopCamera");
+    return _channel?.invokeMethod("stopCamera");
   }
 }
