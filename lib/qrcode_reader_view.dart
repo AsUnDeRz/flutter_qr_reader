@@ -112,7 +112,7 @@ class QrcodeReaderViewState extends State<QrcodeReaderView> with TickerProviderS
   Future _scanImage() async {
     stopScan();
     final image = ImagePicker();
-    var result = await image.getImage(source: ImageSource.gallery);
+    var result = await image.pickImage(source: ImageSource.gallery);
     if (result == null) {
       startScan();
       return;
